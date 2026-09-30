@@ -1,0 +1,27 @@
+# Build output
+dist/
+build/
+out/
+coverage/
+.next/
+.nuxt/
+.svelte-kit/
+
+# Dependencies
+node_modules/
+
+# Lock files (often auto-generated, formatting them creates noise)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+
+# Generated / vendored
+*.min.js
+*.min.css
+vendor/
+
+# Misc
+.cache/
+.vercel/
+.turbo/
