@@ -83,7 +83,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler( async (req, res) => {
-    const {username, email, fullName, password} = req.body;
+    const {username, email, password} = req.body;
     if(!username && !email){
         throw new ApiError(400, "username or email required"
         )
@@ -126,7 +126,30 @@ const loginUser = asyncHandler( async (req, res) => {
 })
 
 const logoutUser = asyncHandler( async (req, res) => {
-  
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1
+      }
+    }
+  );
+
+/* These options control how the browser handles your authentication cookies.
+httpOnly: true — prevents client-side JavaScript from reading the cookie through document.cookie. This helps reduce token theft through certain XSS attacks.
+secure: true — tells the browser to send the cookie only over HTTPS.
+For local development over plain HTTP, secure: true may prevent cookies from being set or sent as expected.*/
+  const options = {
+    httpOnly : true,
+    secure : true
+  }
+
+  return res
+  .status(200)
+  .clearCookie("accessToken", accessToken, options)
+  .clearCookie("refreshToken", refreshToken, options)
+  .json(new ApiResponse(200, {}, "User Logged Out"))
+
 })
 
 export { registerUser, loginUser, logoutUser };
